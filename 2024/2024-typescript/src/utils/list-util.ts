@@ -28,6 +28,11 @@ export class ListUtil {
 		return list.reduce((acc, current) => acc + current, 0);
 	}
 
+	/**
+	 * Count occurrences in a list and return the list element with its occurence count
+	 * @param list The list to count the occurences
+	 * @returns The Map of elements with its correlating occurence count
+	 */
 	public static countOccurences(list: (number | string)[]) {
 		const element2Occurence: Map<string | number, number> = new Map();
 		for (const elem of list) {
