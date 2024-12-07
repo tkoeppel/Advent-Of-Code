@@ -1,0 +1,45 @@
+# VS Code
+.vscode/
+
+# IntelliJ IDEA
+.idea/
+out/
+
+# Gradle
+.gradle/
+build/
+gradlew
+gradlew.bat
+
+# Kotlin DSL
+*.kts.inc
+
+# Kotlin compiled files
+*.class
+
+# Kotlin metadata
+*.meta.js
+
+# Kotlin JavaScript compiled files
+*.js
+
+# Kotlin Native compiled files
+*.konan
+
+# Generated files
+generated/
+
+# Local configuration file (sdk path, etc.)
+local.properties
+
+# Log files
+*.log
+
+# Dependency caches
+.mvn/
+
+# Sensitive data
+*.keystore
+
+# Advent Of Code
+/src/test/resources/*

@@ -1,0 +1,47 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+pubspec.lock
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code
+.vscode/
+
+# Analysis options and definition files
+analysis_options*.yaml
+analysis_options.yaml
+
+# Dart tools
+.dart_tool/
+.packages
+
+# Generated code
+.dart_tool/build/
+build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscated files
+*.obfuscated
+
+# Android Studio will store various IDE-specific files here
+android/
+ios/
+
+# Web related
+lib/generated_plugin_registrant.dart
+
+# Symbolication file for the web
+web/app.*.symbols
+
+# Advent Of Code
+input/*

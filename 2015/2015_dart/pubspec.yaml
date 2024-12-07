@@ -1,0 +1,13 @@
+name: dart_2015
+description: Advent Of Code 2015 in Dart
+
+environment:
+    sdk: ">=2.18.5 <3.0.0"
+
+dev_dependencies:
+    lints: ^2.0.1
+    test: ^1.22.0
+dependencies:
+    binary: ^3.0.1
+    crypto: ^3.0.3
+    tuple: ^2.0.2

@@ -1,0 +1,50 @@
+name: Advent Of Code
+'on':
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  Dart_2015:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Github Actions initialization
+        uses: actions/checkout@v3
+      - name: Dart setup
+        uses: dart-lang/setup-dart@v1
+      - name: Dependency resolvment
+        run: dart pub get
+        working-directory: ./2015/2015_dart/
+      - name: Code formation
+        run: dart format --output=none --set-exit-if-changed .
+        working-directory: ./2015/2015_dart/
+      - name: Code analysis
+        run: dart analyze
+        working-directory: ./2015/2015_dart/
+      - name: Test
+        run: dart test
+        working-directory: ./2015/2015_dart/
+  Kotlin_2023:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Github Actions initialization
+        uses: actions/checkout@v3
+      - name: Java setup
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: adopt
+      - name: Gradle Wrapper validation
+        uses: >-
+          gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      - name: Gradle build
+        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
+      - name: Gradle preparation
+        run: chmod +x ./gradlew
+        working-directory: ./2023/kotlin2023/
+      - name: Test
+        run: ./gradlew test
+        working-directory: ./2023/kotlin2023/
+
