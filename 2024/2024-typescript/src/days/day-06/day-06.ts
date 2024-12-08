@@ -1,4 +1,4 @@
-import { ListUtil } from "../../utils/list-util";
+import { ObjectUtil } from "../../utils/object-util";
 import { StringUtil } from "../../utils/string-util";
 import { IDay } from "../day";
 
@@ -9,22 +9,21 @@ export class Day06 implements IDay {
 
 	public solvePart01(data: string): string | number {
 		const guardJourney = GuardJourney.from(data);
-		return guardJourney.simulateMovement();
+		return guardJourney.journey().size;
 	}
 
 	public solvePart02(data: string): string | number {
-		// TODO
-		return -1;
+		const guardJourney = GuardJourney.from(data);
+		return guardJourney.findPossibleJounreyLoops();
 	}
 }
 
 class GuardJourney {
 	private static readonly OBSTACLE = "#";
-	private static readonly VISITED = "X";
 	private readonly MAX_X;
 	private readonly MAX_Y;
-	private map: string[][];
-	private guard: Guard;
+	private readonly map: string[][];
+	private readonly guard: Guard;
 
 	constructor(map: string[][], guard: Guard) {
 		this.map = map;
@@ -39,16 +38,63 @@ class GuardJourney {
 		return new GuardJourney(map, guard);
 	}
 
-	public simulateMovement() {
-		while (this.guard.isInSight) {
-			this.move();
+	public journey() {
+		const visited: Set<string> = new Set(); // string for uniqueness
+		visited.add(`${this.guard.pos}`);
+
+		const m = ObjectUtil.clone(this.map);
+		const g = new Guard(this.guard.pos, this.guard.direction);
+
+		while (this.move(m, g)) {
+			visited.add(`${g.pos}`);
 		}
 
-		console.log(this.map.map((line) => line.join("")));
-		const visitedCounts = this.map.map(
-			(row) => row.filter((col) => col === GuardJourney.VISITED).length
-		);
-		return ListUtil.sumUp(visitedCounts);
+		return visited;
+	}
+
+	private move(map: string[][], guard: Guard) {
+		const y = guard.pos[1] + guard.direction.vec[1];
+		const x = guard.pos[0] + guard.direction.vec[0];
+
+		if (this.isOutOfBounds([x, y])) {
+			guard.move();
+			return false;
+		} else if (map[y][x] === GuardJourney.OBSTACLE) {
+			guard.turn90Degrees();
+		} else {
+			guard.move();
+		}
+		return true;
+	}
+
+	public findPossibleJounreyLoops() {
+		let count = 0;
+		const visited = this.journey();
+		const maps = [...visited].splice(1).map((v) => {
+			const m = ObjectUtil.clone(this.map);
+			const vPos = v.match(/\d+/g)?.map((m) => Number(m));
+			m[vPos![1]][vPos![0]] = GuardJourney.OBSTACLE;
+			return m;
+		});
+
+		for (const m of maps) {
+			if (this.willGuardLoop(m)) count++;
+		}
+
+		return count;
+	}
+
+	private willGuardLoop(m: string[][]): boolean {
+		const g = new Guard(this.guard.pos, this.guard.direction);
+		let pathLength = 0;
+
+		while (this.move(m, g)) {
+			if (this.isLoop(pathLength)) {
+				return true;
+			}
+			pathLength++;
+		}
+		return false;
 	}
 
 	private isOutOfBounds(pos: [number, number]) {
@@ -60,35 +106,19 @@ class GuardJourney {
 		);
 	}
 
-	private move() {
-		const y = this.guard.pos[1] + this.guard.direction.vec[1];
-		const x = this.guard.pos[0] + this.guard.direction.vec[0];
-
-		if (this.isOutOfBounds([x, y])) {
-			this.visit(this.guard.pos);
-			this.guard.isInSight = false;
-		} else if (this.map[y][x] === GuardJourney.OBSTACLE) {
-			this.guard.turn90Degrees();
-		} else {
-			this.visit(this.guard.pos);
-			this.guard.move();
-		}
-	}
-
-	private visit(pos: [number, number]) {
-		this.map[pos[1]][pos[0]] = GuardJourney.VISITED;
+	private isLoop(pathLength: number) {
+		const maxPath = Math.pow(this.MAX_X, 2) + Math.pow(this.MAX_Y, 2);
+		return pathLength > maxPath;
 	}
 }
 
 class Guard {
 	public pos: [number, number];
 	public direction: Direction;
-	public isInSight: boolean;
 
 	constructor(pos: [number, number], direction: Direction) {
 		this.pos = pos;
 		this.direction = direction;
-		this.isInSight = true;
 	}
 
 	public static from(data: string[][]) {

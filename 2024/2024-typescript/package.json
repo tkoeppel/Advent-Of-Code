@@ -4,7 +4,7 @@
 	"description": "My advent of code submissions for 2024 written in TS.",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest --testMatch \"**/?(*.)+(test).ts\"",
+		"test": "jest --verbose --testMatch \"**/?(*.)+(test).ts\"",
 		"test-day": "jest"
 	},
 	"repository": {
