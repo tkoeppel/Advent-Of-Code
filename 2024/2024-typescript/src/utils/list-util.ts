@@ -1,3 +1,5 @@
+import { UniformTree } from "../data-structures/uniform-tree";
+
 export class ListUtil {
 	/**
 	 * Transpose the matrix. Requisite is the lists in the lsit have the same size
@@ -47,5 +49,16 @@ export class ListUtil {
 
 	public static isBlank(list: any[] | undefined | null) {
 		return !list || list.length === 0;
+	}
+
+	/**
+	 * Creates permuations from uniform tree.
+	 * @param symbols The symbols to use for permutations
+	 * @param size The size of the array with permutations
+	 * @returns The permuatation lists
+	 */
+	public static permutate<T>(symbols: Set<T>, size: number): T[][] {
+		const tree = UniformTree.build<T>(symbols, size);
+		return tree.getLeafs() as T[][];
 	}
 }
