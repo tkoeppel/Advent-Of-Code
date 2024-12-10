@@ -4,5 +4,5 @@ import { Day07 } from "./day-07";
 const day = new Day07();
 
 describe(`Day ${day.getDayIndex()}`, () => {
-	DayTest.solve(day, 3119088655389, 0);
+	DayTest.solve(day, 3119088655389, 264184041398847);
 });
